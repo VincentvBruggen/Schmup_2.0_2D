@@ -9,13 +9,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float moveSpeed;
 
     [Header("Attack Values")]
+    [SerializeField] float fireRate;
     [SerializeField] float projectileSpeed;
     [SerializeField] GameObject bullet;
     [SerializeField] Transform bulletPoint;
 
+    [SerializeField] private bool isShooting = false;
+
     PlayerInputAsset inputActions;
 
     Rigidbody2D rb;
+
+    Coroutine fullAutoCoroutine;
 
     // Start is called before the first frame update
     void Start()
@@ -25,8 +30,10 @@ public class PlayerController : MonoBehaviour
         inputActions.Player.Move.performed += Movement;
         inputActions.Player.Move.canceled += StopMovement;
         inputActions.Player.Fire.performed += DoShoot;
+        inputActions.Player.Fire.canceled += StopShoot;
 
         rb = GetComponent<Rigidbody2D>();
+        
     }
 
 
@@ -51,7 +58,23 @@ public class PlayerController : MonoBehaviour
 
     private void DoShoot(InputAction.CallbackContext context)
     {
-        GameObject projectile = Instantiate(bullet, bulletPoint.position, Quaternion.identity);
-        projectile.GetComponent<Rigidbody2D>().velocity = Vector2.up * projectileSpeed;
+        fullAutoCoroutine = StartCoroutine(FullAuto());
     }
-}
+
+    private void StopShoot(InputAction.CallbackContext context)
+    {
+        StopCoroutine(fullAutoCoroutine);
+    }
+
+    private IEnumerator FullAuto()
+    {
+        while (true)
+        {
+            GameObject projectile = Instantiate(bullet, bulletPoint.position, Quaternion.identity);
+            projectile.GetComponent<Rigidbody2D>().velocity = Vector2.up * projectileSpeed;
+            Destroy(projectile, 5f);
+
+            yield return new WaitForSeconds(fireRate);
+        }
+    }
+}  
