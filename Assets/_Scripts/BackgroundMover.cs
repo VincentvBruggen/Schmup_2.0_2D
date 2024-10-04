@@ -14,11 +14,11 @@ public class BackgroundMover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position += Vector3.down * (moveSpeed * Time.deltaTime);
+        this.transform.position += Vector3.down * moveSpeed;
 
-        if(transform.position.y + 5 < Camera.main.ScreenToWorldPoint(Vector2.right * (float)Screen.width).y)
+        if(this.transform.position.y + 5 < Camera.main.ScreenToWorldPoint(Vector2.right * (float)Screen.width).y)
         {
-            transform.position = Vector3.up * 25;
+            this.transform.position = Vector3.up * 20;
         }
     }
 }
