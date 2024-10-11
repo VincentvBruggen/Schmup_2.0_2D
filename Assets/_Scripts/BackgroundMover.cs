@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class BackgroundMover : MonoBehaviour
 {
-    [SerializeField] float moveSpeed = 200;
+    float moveSpeed = 5;
+    [SerializeField] GameObject[] tilemaps;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,11 +15,14 @@ public class BackgroundMover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.transform.position += Vector3.down * moveSpeed;
-
-        if(this.transform.position.y + 5 < Camera.main.ScreenToWorldPoint(Vector2.right * (float)Screen.width).y)
+        for (int i = 0; i < tilemaps.Length; i++) 
         {
-            this.transform.position = Vector3.up * 20;
+            tilemaps[i].transform.position += Vector3.down * (moveSpeed * Time.deltaTime);
+
+            if (tilemaps[i].transform.position.y + 5 < Camera.main.ScreenToWorldPoint(Vector2.right * (float)Screen.width).y)
+            {
+                tilemaps[i].transform.position = Vector3.up * 20;
+            }
         }
     }
 }

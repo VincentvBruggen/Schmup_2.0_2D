@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
 
         rb.velocity = moveVector * moveSpeed;
     }
-    private void StopMovement(InputAction.CallbackContext obj)
+    private void StopMovement(InputAction.CallbackContext context)
     {
         rb.velocity = Vector2.zero;
     }
