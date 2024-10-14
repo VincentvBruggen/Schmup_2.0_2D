@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseEnemy : MonoBehaviour
+public abstract class BaseEnemy : MonoBehaviour, IDamageable
 {
     protected int hitpoints;
     protected GameObject powerUpDrop;
@@ -12,14 +12,14 @@ public abstract class BaseEnemy : MonoBehaviour
         
     }
 
-    // Update is called once per frame
+    // Update is called once per frame|
     void Update()
     {
         
     }
-    public virtual void TakeDamage(int damage)
+    public void TakeDamage(int amount)
     {
-        hitpoints -= damage;
+        hitpoints -= amount;
 
         if(hitpoints >= 0)
         {
@@ -29,6 +29,6 @@ public abstract class BaseEnemy : MonoBehaviour
 
     protected virtual void OnDeath()
     {
-
+        Destroy(gameObject);
     }
 }
