@@ -9,7 +9,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float moveSpeed;
 
     [Header("Attack Values")]
-    [SerializeField] float fireRate;
+    [SerializeField] int projectileCount;
+    [SerializeField] float cooldown;
     [SerializeField] float projectileSpeed;
     [SerializeField] GameObject bullet;
     [SerializeField] Transform bulletPoint;
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         inputActions = new PlayerInputAsset();
+
         inputActions.Player.Enable();
         inputActions.Player.Move.performed += Movement;
         inputActions.Player.Move.canceled += StopMovement;
@@ -43,7 +45,7 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    private void Movement(InputAction.CallbackContext context)
+    public void Movement(InputAction.CallbackContext context)
     {
         Vector2 moveVector = context.ReadValue<Vector2>();
         moveVector.y = 0;
@@ -74,7 +76,7 @@ public class PlayerController : MonoBehaviour
             projectile.GetComponent<Rigidbody2D>().velocity = Vector2.up * projectileSpeed;
             Destroy(projectile, 5f);
 
-            yield return new WaitForSeconds(fireRate);
+            yield return new WaitForSeconds(cooldown);
         }
     }
 }  

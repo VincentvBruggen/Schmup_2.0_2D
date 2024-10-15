@@ -404,6 +404,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MovingEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 1956440238883626055, guid: 8b93eaac231853245bd7a1b78000c323, type: 3}
+      propertyPath: m_BodyType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6779763014787753886, guid: 8b93eaac231853245bd7a1b78000c323, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.6340034
@@ -4531,7 +4535,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 7
-  fireRate: 0.1
+  projectileCount: 0
+  cooldown: 0
   projectileSpeed: 5
   bullet: {fileID: 8779416784866911907, guid: 6f5bee81435c4ec44bf66354433d0f19, type: 3}
   bulletPoint: {fileID: 1180056986}

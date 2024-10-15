@@ -10,16 +10,22 @@ public class MoveEnemy : BaseEnemy
         TowardPlayer,
     }
 
-    private MoveState moveState;
+    [SerializeField] private MoveState moveState;
     [SerializeField] float moveSpeed;
 
     [SerializeField] Vector3 startPosition;
     [SerializeField] Vector3 gotoPosition;
 
+    Vector2 moveDirection;
     float startTime = 0;
+    bool inPosition = false;
+
+    Rigidbody2D rb;
     // Start is called before the first frame update
     void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
+
         if(Random.value < 0.5f)
         {
             moveState = MoveState.NormalMove;
@@ -34,34 +40,68 @@ public class MoveEnemy : BaseEnemy
         gotoPosition = GetStartPosition();
         gotoPosition.x = transform.position.x;
         gotoPosition.z = transform.position.z;
+
+        moveDirection = Random.value > 0.5f ? Vector2.right : Vector2.left;
+        moveSpeed += WaveManager.Instance.currentWave / 4;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(startTime < 1)
+        if(transform.position.y == gotoPosition.y)
         {
-            startTime += Time.deltaTime;
+            inPosition = true;
         }
-        transform.position = Vector3.Lerp(startPosition, gotoPosition, startTime);
 
-        switch(moveState)
+        if (inPosition)
         {
-            case MoveState.NormalMove:
-                NormalMove(); break;
+            switch (moveState)
+            {
+                case MoveState.NormalMove:
+                    NormalMove(); break;
 
-            case MoveState.TowardPlayer:
-                TowardPlayer(); break;
+                case MoveState.TowardPlayer:
+                    TowardPlayer(); break;
+            }
+
+            rb.velocity = moveDirection * moveSpeed;
+        }
+        else
+        {
+            if (startTime < 1)
+            {
+                startTime += Time.deltaTime;
+            }
+            transform.position = Vector3.Lerp(startPosition, gotoPosition, startTime);
+
         }
     }
 
     public void NormalMove()
     {
+        Vector2 worldEdge = Camera.main.ScreenToWorldPoint(Vector2.right * (float)Screen.width);
 
+        if (transform.position.x > worldEdge.x)
+        {
+            moveDirection = Vector2.left;
+        }
+        else if (transform.position.x < -worldEdge.x)
+        {
+            moveDirection = Vector2.right;
+        }
     }
     public void TowardPlayer()
     {
+        Vector2 worldEdge = Camera.main.ScreenToWorldPoint(Vector2.right * (float)Screen.width);
 
+        if (transform.position.x > worldEdge.x)
+        {
+            moveDirection = Vector2.left;
+        }
+        else if (transform.position.x < -worldEdge.x)
+        {
+            moveDirection = Vector2.right;
+        }
     }
 
     Vector3 GetStartPosition()
